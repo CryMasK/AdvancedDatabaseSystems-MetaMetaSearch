@@ -1,0 +1,31 @@
+https://www.trivago.com.tw/?
+aDateRange[arr]=2018-12-28
+&aDateRange[dep]=2018-12-29
+&aPriceRange[from]=0
+&aPriceRange[to]=0
+&iPathId=556372
+&aGeoCode[lat]=25.08231
+&aGeoCode[lng]=121.568047
+&iGeoDistanceItem=2512914
+&aCategoryRange=0,1,2,3,4,5
+&aOverallLiking=1,2,3,4,5
+&sOrderBy=relevance desc
+&bTopDealsOnly=false
+&iRoomType=7
+&cpt=251291402
+&iIncludeAll=0
+&iViewType=0
+&bIsSeoPage=0
+&bIsSitemap=false
+
+https://www.trivago.com.tw/?
+aDateRange[arr]=2018-12-28
+&aDateRange[dep]=2018-12-29
+&aGeoCode[lat]=25.08231
+&aGeoCode[lng]=121.568047
+&iGeoDistanceItem=2512914 // hotel_id is better
+&iPathId=556372 // city_id 
+
+https://www.hotelscombined.com.tw/Hotels/Search?destination=place:Neihu&radius=5km&checkin=2018-12-30&checkout=2018-12-31
+
+https://www.agoda.com/zh-tw/pages/agoda/default/DestinationSearchResult.aspx?area=58929
