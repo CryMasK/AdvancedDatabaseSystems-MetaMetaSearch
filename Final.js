@@ -7,6 +7,8 @@ const SEARCH_TARGET = ['台北', '台北', '東京', '東京']; // order by data
 const TARGET_SITE = ['trivago', 'hotelscombined', 'kayak'];
 const RETRIEVE_LIMIT = 10;
 
+const COMPARE_INTERVAL = 0.3; // in showInfo(), to determine how large price interval be used to compare
+
 let raw_data = {};
 let result = []; // our ranking
 let duplicateHotels = []; // record duplicate hotel name within raw data
@@ -157,6 +159,7 @@ function showInfo(raw = raw_data, ours = result){ // Object, Array
 	console.log('Our ranking result length: ' + ours.length);
 	
 	/* Show the difference between our lowest/highest price and the average of lowest/highest price from each result */
+	// the lowest/highest price
 	let avgLowestPrice = 0,
 		avgLowestPriceRatio = 0,
 		avgHighestPrice = 0,
@@ -173,10 +176,52 @@ function showInfo(raw = raw_data, ours = result){ // Object, Array
 	avgHighestPrice /= TARGET_SITE.length;
 	avgHighestPriceRatio /= TARGET_SITE.length;
 	
+	// the TopK/LastK price
+	let avgLowIntervalPrice = 0,
+		avgLowIntervalPriceRatio = 0,
+		avgHighIntervalPrice = 0,
+		avgHighIntervalPriceRatio = 0;
+	let ourAvgTopKPrice = 0,
+		ourAvgLastKPrice = 0;
+	
+	// compute the average of our result TopK/LastK price
+	let ourTopK = Math.floor(ours.length * COMPARE_INTERVAL);
+	for (let i=0; i<ourTopK; i++){
+		ourAvgTopKPrice += ours[i]['price'];
+	}
+	ourAvgTopKPrice /= ourTopK;
+	for (let i=ours.length - ourTopK; i<ours.length; i++){
+		ourAvgLastKPrice += ours[i]['price'];
+	}
+	ourAvgLastKPrice /= ourTopK;
+		
+	for (let site in raw){
+		let topK = Math.floor(raw[site].length * COMPARE_INTERVAL);
+		for (let i=0; i<topK; i++){
+			avgLowIntervalPrice += raw[site][i]['price'];
+		}
+		avgLowIntervalPrice /= topK;
+		avgLowIntervalPriceRatio += (ourAvgTopKPrice - avgLowIntervalPrice) / avgLowIntervalPrice;
+		
+		for (let i=raw[site].length - topK; i<raw[site].length; i++){
+			avgHighIntervalPrice += raw[site][i]['price'];
+		}
+		avgHighIntervalPrice /= topK;
+		avgHighIntervalPriceRatio += (ourAvgLastKPrice - avgHighIntervalPrice) / avgHighIntervalPrice;
+	}
+	avgLowIntervalPrice /= TARGET_SITE.length;
+	avgLowIntervalPriceRatio /= TARGET_SITE.length;
+	avgHighIntervalPrice /= TARGET_SITE.length;
+	avgHighIntervalPriceRatio /= TARGET_SITE.length;
+	
 	console.log('與「最低價物件平均」相差: ' + (ours[0]['price'] - avgLowestPrice));
 	console.log('與「最低價物件」平均相差比例: ' + (avgLowestPriceRatio * 100) + '%');
+	console.log('與「低價物件（前' + (COMPARE_INTERVAL * 100) +'%平均）平均」相差: ' + (ourAvgTopKPrice - avgLowIntervalPrice));
+	console.log('與「低價物件（前' + (COMPARE_INTERVAL * 100) +'%平均）」平均相差比例: ' + (avgLowIntervalPriceRatio * 100) + '%');
 	console.log('與「最高價物件平均」相差: ' + (ours[ours.length - 1]['price'] - avgHighestPrice));
 	console.log('與「最高價物件」平均相差比例: ' + (avgHighestPriceRatio * 100) + '%');
+	console.log('與「高價物件（後' + (COMPARE_INTERVAL * 100) +'%平均）平均」相差: ' + (ourAvgLastKPrice - avgHighIntervalPrice));
+	console.log('與「高價物件（後' + (COMPARE_INTERVAL * 100) +'%平均）」平均相差比例: ' + (avgHighIntervalPriceRatio * 100) + '%');
 	
 	console.log('我們的結果數量平均多上(多樣性): ' + (avgLongerThan * 100) + '%');
 	
