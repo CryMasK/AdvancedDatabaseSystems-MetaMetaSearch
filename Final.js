@@ -3,7 +3,7 @@ const cheerio = require('cheerio'); // CSS Selector
 const fs = require('fs'); // FileStream
 
 const DATA_ID = 1;
-const SEARCH_TARGET = ['台北', '台北', '東京', '東京']; // order by data id
+const SEARCH_TARGET = ['台北', '台北', '東京', '東京', '台北', '台北', '宜蘭', '倫敦', '高雄', '香港']; // order by data id
 const TARGET_SITE = ['trivago', 'hotelscombined', 'kayak'];
 const RETRIEVE_LIMIT = 10;
 
