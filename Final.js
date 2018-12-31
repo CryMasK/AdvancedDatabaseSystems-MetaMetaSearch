@@ -197,17 +197,22 @@ function showInfo(raw = raw_data, ours = result){ // Object, Array
 		
 	for (let site in raw){
 		let topK = Math.floor(raw[site].length * COMPARE_INTERVAL);
-		for (let i=0; i<topK; i++){
-			avgLowIntervalPrice += raw[site][i]['price'];
-		}
-		avgLowIntervalPrice /= topK;
-		avgLowIntervalPriceRatio += (ourAvgTopKPrice - avgLowIntervalPrice) / avgLowIntervalPrice;
 		
-		for (let i=raw[site].length - topK; i<raw[site].length; i++){
-			avgHighIntervalPrice += raw[site][i]['price'];
+		let lowIntervalPrice = 0;
+		for (let i=0; i<topK; i++){
+			lowIntervalPrice += raw[site][i]['price'];
 		}
-		avgHighIntervalPrice /= topK;
-		avgHighIntervalPriceRatio += (ourAvgLastKPrice - avgHighIntervalPrice) / avgHighIntervalPrice;
+		lowIntervalPrice /= topK;
+		avgLowIntervalPrice += lowIntervalPrice;
+		avgLowIntervalPriceRatio += (ourAvgTopKPrice - lowIntervalPrice) / lowIntervalPrice;
+		
+		let highIntervalPrice = 0;
+		for (let i=raw[site].length - topK; i<raw[site].length; i++){
+			highIntervalPrice += raw[site][i]['price'];
+		}
+		highIntervalPrice /= topK;
+		avgHighIntervalPrice += highIntervalPrice;
+		avgHighIntervalPriceRatio += (ourAvgLastKPrice - highIntervalPrice) / highIntervalPrice;
 	}
 	avgLowIntervalPrice /= TARGET_SITE.length;
 	avgLowIntervalPriceRatio /= TARGET_SITE.length;
