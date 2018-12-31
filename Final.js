@@ -83,14 +83,16 @@ function crawlHotelInfo(site){
 				}
 				
 				/* Price */
-				let price = -1;
-				if ($hotelInfo('.highlightedPrice').length){ // the lowest price is in the price list
-					price = $hotelInfo('.highlightedPrice .price').text();
-				}
-				else {
-					price = $hotelInfo('div[id$="-booking-price"]').text();
-				}
+				let price = $hotelInfo('div[id$="-booking-price"]').text();
 				price = parseInt( price.match(/\d+/g).join('') );
+				$hotelInfo('.inlineMultibook .price').each((i, elem) => {
+					let candidatePrice = $(elem).text();
+					candidatePrice = parseInt( candidatePrice.match(/\d+/g).join('') ); // from string to int
+					
+					if (candidatePrice < price){
+						price = candidatePrice;
+					}
+				});
 				
 				let info = {
 					name: name,
@@ -275,6 +277,9 @@ function showInfo(raw = raw_data, ours = result){ // Object, Array
 					}
 				}
 			}
+			/*else {
+				console.log(hotel)
+			}*/
 		}
 		avgSavingMoney /= saveCounter;
 		
