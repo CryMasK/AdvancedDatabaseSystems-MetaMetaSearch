@@ -3,7 +3,7 @@ const cheerio = require('cheerio'); // CSS Selector
 const fs = require('fs'); // FileStream
 
 const DATA_ID = 1;
-const SEARCH_TARGET = ['台北', '台北', '東京', '東京', '台北', '台北', '宜蘭', '倫敦', '高雄', '香港']; // order by data id
+const SEARCH_TARGET = ['[臺台]{1}北', '[臺台]{1}北', '東京', '東京', '[臺台]{1}北', '[臺台]{1}北', '宜蘭', '倫敦', '高雄', '香港', '哥本哈根', '深圳', '諾維薩', '[臺台]{1}北', '[臺台]{1}中', '[臺台]{1}南', '花蓮', '新竹', '宜蘭', '南投', '高雄', '[臺台]{1}東', '屏東']; // order by data id
 const TARGET_SITE = ['trivago', 'hotelscombined', 'kayak'];
 const RETRIEVE_LIMIT = 10;
 
@@ -69,8 +69,12 @@ function crawlHotelInfo(site){
 		case 'kayak':{
 			let $ = cheerio.load(webPage); // load web
 			
+			let numberOfResult = parseInt( $('span[id$="-filteredCount"]').text() );
 			$('.Hotels-Results-HotelResultItem').each((i, elem) => {
 				if (i >= RETRIEVE_LIMIT){
+					return false; // break
+				}
+				if (i >= numberOfResult){
 					return false; // break
 				}
 				
@@ -111,8 +115,12 @@ function crawlHotelInfo(site){
 		case 'trivago':{
 			let $ = cheerio.load(webPage); // load web
 			
+			let errMsgIndex = $('li.itemlist_error_wrapper').index(); // only have these result
 			$('.js_co_item').each((i, elem) => {
 				if (i >= RETRIEVE_LIMIT){
+					return false; // break
+				}
+				if (errMsgIndex != -1 && i >= errMsgIndex){
 					return false; // break
 				}
 				
@@ -199,6 +207,7 @@ function showInfo(raw = raw_data, ours = result){ // Object, Array
 		
 	for (let site in raw){
 		let topK = Math.floor(raw[site].length * COMPARE_INTERVAL);
+		topK = (topK) ? topK : 1; // lower bound
 		
 		let lowIntervalPrice = 0;
 		for (let i=0; i<topK; i++){

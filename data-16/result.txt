@@ -1,0 +1,1 @@
+[{"name":"佰客台南青年旅店","price":1100},{"name":"來住安平","price":1830},{"name":"台糖長榮酒店","price":2909},{"name":"桂田酒店","price":2977},{"name":"香格里拉臺南遠東國際大飯店","price":3107},{"name":"Crowne Plaza Tainan","price":3329},{"name":"台南大億麗緻","price":3636},{"name":"台南大億麗緻酒店","price":3636},{"name":"安平留飯店","price":5835},{"name":"台南大員皇冠假日酒店","price":6657},{"name":"台南晶英酒店","price":15400}]

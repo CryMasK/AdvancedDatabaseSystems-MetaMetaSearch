@@ -1,0 +1,1 @@
+{"trivago":[{"name":"Howard Plaza Hotel Hsinchu","price":1936},{"name":"Ambassador Hotel Hsinchu","price":3360},{"name":"新竹老爺大酒店","price":3740},{"name":"Hotel Indigo Hsinchu Science Park","price":4095}],"hotelscombined":[{"name":"新竹福華大飯店","price":4013},{"name":"新竹老爺酒店","price":7480},{"name":"新竹國賓大飯店","price":8247}],"kayak":[{"name":"新竹豐邑喜來登大飯店","price":5040}]}
